@@ -24,6 +24,12 @@ programs.fish.enable = true;
 virtualisation.vmware.host.enable = true;
 
 environment.systemPackages = with pkgs; [
+	obsidian
+	kdePackages.ksystemlog
+	kdePackages.filelight
+	obs-studio
+	kdePackages.kolourpaint
+	kdePackages.kdenlive
 	gparted-full
 	git
 	qbittorrent
