@@ -50,4 +50,8 @@ hardware.bluetooth = {
 	powerOnBoot = true;
 };
 
+zramSwap.enable = true;
+zramSwap.algorithm = "zstd";
+boot.kernel.sysctl."vm.swappiness" = 10;
  }
+

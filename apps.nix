@@ -24,7 +24,7 @@ programs.fish.enable = true;
 virtualisation.vmware.host.enable = true;
 
 environment.systemPackages = with pkgs; [
-	pkgs.gparted-full
+	gparted-full
 	git
 	qbittorrent
 	proton-vpn

@@ -5,11 +5,13 @@ imports = [
     ./apps.nix
     ./services.nix
     ./automount.nix
+	./firewall.nix
   ];
 
 boot.loader.systemd-boot.enable = true;
 boot.loader.efi.canTouchEfiVariables = true;
 boot.kernelParams = [ "quiet" "splash" "btusb.enable_autosuspend=n" "amd_pstate=active" "amdgpu.ppfeaturemask=0xffffffff"];  
+boot.plymouth.enable = true;
 
 networking.hostName = "nixdesktop";
 
@@ -30,7 +32,7 @@ i18n.extraLocaleSettings = {
 users.users.andre1ka = {
 	isNormalUser = true;
 	description = "Andrii Haliev";
-	extraGroups = [ "networkmanager" "wheel" "gamemode" "storage" "input" "libvirtd" "kvm"];
+	extraGroups = [ "networkmanager" "wheel" "gamemode" "storage" "input" "kvm"];
 	shell = pkgs.fish;
 	packages = with pkgs; [
 		kdePackages.kate
