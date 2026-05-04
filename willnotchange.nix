@@ -18,7 +18,7 @@ i18n.extraLocaleSettings = {
   LC_TIME = "uk_UA.UTF-8";
 };
 services.desktopManager.plasma6.enable = true;
-networking.hostName = "nixos";
+networking.hostName = "nix";
 services.flatpak.enable = true;
 services.fstrim.enable = true;
 services.lact.enable = true;
@@ -37,5 +37,13 @@ hardware.bluetooth = {
 	enable = true;
 	powerOnBoot = true;
 };
+
+nix.gc = {
+  automatic = true;
+  dates = "weekly";
+  options = "--delete-older-than 7d";
+};
+
+hardware.cpu.amd.updateMicrocode = true;
 
 }

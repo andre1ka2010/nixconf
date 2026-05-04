@@ -15,7 +15,7 @@ boot.kernelParams = [ "loglevel=4" "nowatchdog" "btusb.enable_autosuspend=n" "am
 
 boot.kernelPackages = pkgs.linuxPackages_latest;
 
-# Enable sound with pipewire.
+services.pipewire.jack.enable = true;
 services.pulseaudio.enable = false;
 security.rtkit.enable = true;
 services.pipewire = {
@@ -23,7 +23,7 @@ services.pipewire = {
   alsa.enable = true;
   alsa.support32Bit = true;
   pulse.enable = true;
-  };
+};
 
 users.users.evoq = {
   isNormalUser = true;
@@ -41,7 +41,6 @@ programs.gamemode.enable = true;
 programs.fish.enable = true;
 programs.steam.enable = true;
 
-  # $ nix search wget
 environment.systemPackages = with pkgs; [
   mangohud
   wget
@@ -68,8 +67,8 @@ environment.systemPackages = with pkgs; [
   javaPackages.compiler.temurin-bin.jdk-25
 ];
 
-  networking.firewall.allowedTCPPorts = [ 25565 ];
-  networking.firewall.allowedUDPPorts = [ 25565 ];
-  networking.firewall.enable = true;
+networking.firewall.allowedTCPPorts = [ 25565 ];
+networking.firewall.allowedUDPPorts = [ 25565 ];
+networking.firewall.enable = true;
 
 }
