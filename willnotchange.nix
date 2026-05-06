@@ -45,5 +45,10 @@ nix.gc = {
 };
 
 hardware.cpu.amd.updateMicrocode = true;
+zramSwap = {
+  enable = true;
+  algorithm = "zstd";
+  memoryPercent = 25;  # 8 GB
+};
 
 }

@@ -70,5 +70,6 @@ environment.systemPackages = with pkgs; [
 networking.firewall.allowedTCPPorts = [ 25565 ];
 networking.firewall.allowedUDPPorts = [ 25565 ];
 networking.firewall.enable = true;
+networking.firewall.allowPing = false; 
 
 }
