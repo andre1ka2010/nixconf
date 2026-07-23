@@ -4,22 +4,23 @@
   imports =
     [
       ./hardware-configuration.nix
+      ./plasma-lag-fix.nix
     ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.loader.systemd-boot.consoleMode = "max";
   boot.kernelParams = [
+  "amdgpu.ppfeaturemask=0xffffffff"
   #"quiet"
   #"splash"
   "amd_pstate=active"
   "btusb.enable_autosuspend=0"
-  #"amdgpu.ppfeaturemask=0xffffffff"
   ];
 
 
   networking.hostName = "hmmilyall";
-
   networking.networkmanager.enable = true;
   time.timeZone = "Europe/Kyiv";
   i18n.defaultLocale = "en_US.UTF-8";
@@ -34,32 +35,23 @@
     LC_TELEPHONE = "uk_UA.UTF-8";
     LC_TIME = "uk_UA.UTF-8";
   };
-
-  services.xserver.enable = false;
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
-
-  services.desktopManager.plasma6.enable = true;
   
-  services.greetd = {
+  services.displayManager.plasma-login-manager.enable = true;
+  services.desktopManager.plasma6.enable = true;
+  xdg.portal = {
     enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session";
-        user = "greeter";
+    xdgOpenUsePortal = true;
+    extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde ];
+    config = {
+      common = {
+        default = [ "kde" ];
       };
     };
   };
 
-
-
-
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
-  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -71,7 +63,7 @@
 
   users.users."user" = {
     isNormalUser = true;
-    description = "User";
+    description = "user";
     extraGroups = [ "networkmanager" "wheel" "gamemode" "input" "video" ];
     packages = with pkgs; [ ];
     shell = pkgs.fish;
@@ -80,18 +72,23 @@
   nixpkgs.config.allowUnfree = true;
 
   programs.obs-studio.enable = true;
-  programs.steam.enable = true;
   programs.gamemode.enable = true;
   programs.kdeconnect.enable = true;
   programs.firefox.enable = true;
   programs.fish.enable = true;
-
+  programs.steam = {
+  enable = true;
+  localNetworkGameTransfers.openFirewall = true; 
+  remotePlay.openFirewall = true; 
+};
+  
   programs.fish.shellAliases = {
   nixconf = "sudo nano /etc/nixos/configuration.nix";
   rebuild = "sudo nixos-rebuild switch";
   rebuildgrade = "sudo nixos-rebuild switch --upgrade";
   rebuildboot = "sudo nixos-rebuild boot";
   rebuildbootgrade = "sudo nixos-rebuild boot --upgrade";
+  startplasma = "startplasma-wayland";
   };
 
   environment.systemPackages = with pkgs; [
@@ -104,7 +101,6 @@
     easyeffects
     telegram-desktop
     haruna
-    mission-center
     goverlay
     mangohud
     discord
@@ -114,11 +110,15 @@
     unzip
     unrar
     fastfetch
+    fetch
     git
     curl
     wget
     p7zip
-
+    android-tools
+    scrcpy
+    jdk25
+    micro
   ];
 
   fonts = {
@@ -126,13 +126,27 @@
       noto-fonts
       jetbrains-mono
       terminus_font
+      maple-mono.variable
+      noto-fonts-color-emoji
+      noto-fonts-cjk-sans
     ];
   };
 
+  hardware.amdgpu.initrd.enable = true;
+  hardware.enableRedistributableFirmware = true;
   hardware.cpu.amd.updateMicrocode = true;
   hardware.bluetooth = {
   enable = true;
   powerOnBoot = true;
+  };
+  
+  nix.optimise.automatic = true;
+  nix.optimise.dates = [ "weekly" ];
+
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
   };
 
   services.fstrim.enable = true;
@@ -145,9 +159,12 @@
     memoryPercent = 25;
   };
 
-  networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 25565 ];
-  networking.firewall.allowedUDPPorts = [ 25565 ];
+
+  networking.firewall = {
+  enable = true;
+  allowedTCPPorts = [ 25565 ];
+  allowedUDPPorts = [ ];
+};
 
   system.stateVersion = "26.05";
 
