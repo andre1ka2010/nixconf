@@ -1,5 +1,9 @@
 { config, pkgs, ... }:
 
+let
+  zen-browser = (import (builtins.fetchTarball "https://github.com/youwen5/zen-browser-flake/archive/master.tar.gz") { inherit pkgs; }).default;
+in
+
 {
   imports =
     [
@@ -10,7 +14,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.loader.systemd-boot.consoleMode = "max";
+  boot.loader.systemd-boot.consoleMode = "keep";
   boot.kernelParams = [
   "amdgpu.ppfeaturemask=0xffffffff"
   #"quiet"
@@ -61,13 +65,23 @@
     #jack.enable = true;
   };
 
-  users.users."user" = {
+  users.users."andrii" = {
     isNormalUser = true;
-    description = "user";
+    description = "Andrii Haliev";
     extraGroups = [ "networkmanager" "wheel" "gamemode" "input" "video" ];
     packages = with pkgs; [ ];
     shell = pkgs.fish;
   };
+
+  users.users.minecraft = {
+  isSystemUser = true;
+  group = "minecraft";
+  home = "/var/lib/minecraft";
+  createHome = true;
+  shell = pkgs.shadow;
+  };
+  users.groups.minecraft = {};
+
 
   nixpkgs.config.allowUnfree = true;
 
@@ -80,7 +94,7 @@
   enable = true;
   localNetworkGameTransfers.openFirewall = true; 
   remotePlay.openFirewall = true; 
-};
+  };
   
   programs.fish.shellAliases = {
   nixconf = "sudo nano /etc/nixos/configuration.nix";
@@ -88,7 +102,6 @@
   rebuildgrade = "sudo nixos-rebuild switch --upgrade";
   rebuildboot = "sudo nixos-rebuild boot";
   rebuildbootgrade = "sudo nixos-rebuild boot --upgrade";
-  startplasma = "startplasma-wayland";
   };
 
   environment.systemPackages = with pkgs; [
@@ -103,14 +116,18 @@
     haruna
     goverlay
     mangohud
+    proton-vpn
+    galaxy-buds-client
+    zen-browser
     discord
+    mission-center    
+    qbittorrent
 
     # --CLI--
     zip
     unzip
     unrar
     fastfetch
-    fetch
     git
     curl
     wget
@@ -118,7 +135,7 @@
     android-tools
     scrcpy
     jdk25
-    micro
+    htop
   ];
 
   fonts = {
@@ -131,6 +148,8 @@
       noto-fonts-cjk-sans
     ];
   };
+
+  boot.tmp.useTmpfs = true;
 
   hardware.amdgpu.initrd.enable = true;
   hardware.enableRedistributableFirmware = true;
@@ -150,8 +169,8 @@
   };
 
   services.fstrim.enable = true;
-  services.lact.enable = true;
-  services.flatpak.enable = true; # spotify
+  # services.lact.enable = true;
+  services.flatpak.enable = true; # spotify sober
 
   zramSwap = {
     enable = true;
