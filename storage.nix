@@ -5,10 +5,4 @@
     fsType = "ext4";
     options = [ "noatime" "nofail" ];
   };
-
-  fileSystems."/mnt/sda" = {
-    device = "/dev/disk/by-uuid/d7300ef2-814a-43f3-b33a-bb98fc25d887";
-    fsType = "ext4";
-    options = [ "noatime" "nofail" ];
-};
 }

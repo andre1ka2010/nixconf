@@ -5,9 +5,8 @@
     ./modules/boot.nix
     ./modules/hardware.nix
     ./modules/network-locale.nix
-    ./modules/desktop-environment.nix
     ./modules/users.nix
-    ./modules/software.nix
+    ./modules/progs-n-de.nix
     ./modules/nix-n-services.nix
     ./modules/storage.nix
     ./modules/plasma-lag-fix.nix
