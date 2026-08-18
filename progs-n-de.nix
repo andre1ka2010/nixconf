@@ -20,9 +20,6 @@
     pulse.enable = true;
   };
 
-  # --- Programs: софт со своим NixOS-модулем (programs.<name>.enable) ---
-  # проверяется на search.nixos.org — если модуль есть, он тащит доп.
-  # интеграцию (systemd-юниты, конфиги, группы), а не просто ставит бинарник
   programs.obs-studio.enable = true;
   programs.gamemode.enable = true;
   programs.kdeconnect.enable = true;
@@ -39,13 +36,11 @@
     enable = true;
     localNetworkGameTransfers.openFirewall = true;
     remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = false;
   };
 
 
-
-  # --- Packages: всё остальное, без отдельного programs.<name> ---
   environment.systemPackages = with pkgs; [
-
     # --GUI--
     kdePackages.kate
     kdePackages.ksystemlog
@@ -59,6 +54,7 @@
     mission-center
     qbittorrent
     kitty
+    kdePackages.filelight
 
     # --CLI--
     zip
@@ -77,7 +73,6 @@
   # --- Шрифты ---
   fonts.packages = with pkgs; [
     noto-fonts
-    jetbrains-mono
     maple-mono.variable
     noto-fonts-color-emoji
     noto-fonts-cjk-sans

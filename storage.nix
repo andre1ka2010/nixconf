@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 {
-  fileSystems."/mnt/sdb" = {
-    device = "/dev/disk/by-uuid/84a94194-24d5-4f8c-a954-fea16aa08558";
+  fileSystems."/mnt/sata1000" = {
+    device = "/dev/disk/by-uuid/98e42b06-2ce3-4497-9008-13e74d44dbc4";
     fsType = "ext4";
     options = [ "noatime" "nofail" ];
   };
